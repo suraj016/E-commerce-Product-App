@@ -8,6 +8,9 @@ export default function App({ Component, pageProps }) {
     <Provider store={store}>
       <Navbar />
       <Component {...pageProps} />
+      <footer style={{ textAlign: 'center', padding: '24px', color: '#888', fontSize: '0.9rem' }}>
+        © {new Date().getFullYear()} ShopZone
+      </footer>
     </Provider>
   );
 }

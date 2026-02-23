@@ -11,6 +11,12 @@
   color: #1e293b;
 }
 
+.pageSubtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: -8px 0 0 0;
+}
+
 .searchBar {
   width: 100%;
   max-width: 420px;

@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import productsReducer from './productsSlice';
 import cartReducer from './cartSlice';
 
+
 function loadCartFromStorage() {
   try {
     if (typeof window === 'undefined') return undefined;
     const stored = localStorage.getItem('cart');
     if (!stored) return undefined;
     const parsedData = JSON.parse(stored);
+    if (!Array.isArray(parsedData)) return undefined;
     return { cartItems: parsedData };
   } catch (e) {
     return undefined;
@@ -29,7 +31,7 @@ store.subscribe(() => {
     const cartItems = store.getState().cart.cartItems;
     localStorage.setItem('cart', JSON.stringify(cartItems));
   } catch (e) {
-    
+    // ignore
   }
 });
 

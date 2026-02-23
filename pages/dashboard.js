@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import DashboardCard from '../components/DashboardCard';
 import {
@@ -13,19 +14,24 @@ export default function Dashboard() {
   const cartTotal = useSelector(selectCartTotal);
   const [sortAsc, setSortAsc] = useState(true);
 
-  const sortedProducts = [...products].sort((a, b) => {
-    return sortAsc ? a.price - b.price : b.price - a.price;
+  const byPrice = [...products].sort((a, b) => {
+    const pa = a.price ?? 0;
+    const pb = b.price ?? 0;
+    return sortAsc ? pa - pb : pb - pa;
   });
 
-  function handleSort() {
-    setSortAsc(!sortAsc);
+  function toggleSort() {
+    setSortAsc((s) => !s);
   }
 
   return (
     <div className="container">
+      <Head>
+        <title>ShopZone | Dashboard</title>
+      </Head>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Dashboard</h1>
-        <p className={styles.subtitle}>Store overview</p>
+        <p className={styles.subtitle}>Quick look at the numbers.</p>
       </div>
 
       <div className={styles.cardsRow}>
@@ -42,21 +48,21 @@ export default function Dashboard() {
         <DashboardCard
           icon="💰"
           label="Cart Value"
-          value={'$' + cartTotal.toFixed(2)}
+          value={'$' + (cartTotal ?? 0).toFixed(2)}
         />
       </div>
 
       <div className={styles.tableSection}>
         <div className={styles.tableHeader}>
           <h2 className={styles.sectionTitle}>All Products</h2>
-          <button onClick={handleSort} className={styles.sortBtn}>
+          <button type="button" onClick={toggleSort} className={styles.sortBtn}>
             {sortAsc ? 'Sort: Low → High' : 'Sort: High → Low'}
           </button>
         </div>
 
         {products.length === 0 && (
           <p className={styles.noData}>
-            No products loaded. Go to Home page first.
+            No products loaded yet. Open the Home page first.
           </p>
         )}
 
@@ -72,7 +78,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {sortedProducts.map((product, index) => (
+                {byPrice.map((product, index) => (
                   <tr
                     key={product.id}
                     className={index % 2 === 0 ? styles.evenRow : undefined}
@@ -85,7 +91,7 @@ export default function Dashboard() {
                       </span>
                     </td>
                     <td className={styles.priceCell}>
-                      ${product.price.toFixed(2)}
+                      ${(product.price ?? 0).toFixed(2)}
                     </td>
                   </tr>
                 ))}

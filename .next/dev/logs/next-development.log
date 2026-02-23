@@ -1,34 +1,122 @@
-[00:00:04.712] Server  LOG     ✓ Ready in 3.4s
-[00:00:07.790] Server  LOG     ○ Compiling / ...
-[00:04:42.465] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+[00:00:11.152] Server  LOG     ✓ Ready in 7.7s
+[00:07:46.934] Server  LOG     ✓ Compiled in 381ms
+[00:08:53.270] Server  LOG     ✓ Compiled in 44ms
+[01:42:14.357] Server  LOG     ✓ Compiled in 1240ms
+[01:42:18.268] Server  LOG     ✓ Compiled in 3s
+[01:42:19.695] Server  LOG     ✓ Compiled in 818ms
+[01:42:21.193] Server  LOG     ✓ Compiled in 461ms
+[01:42:23.186] Server  LOG     ✓ Compiled in 118ms
+[01:42:23.939] Server  LOG     ✓ Compiled in 243ms
+[01:42:25.749] Server  LOG     ✓ Compiled in 150ms
+[01:42:36.426] Server  LOG     ✓ Compiled in 157ms
+[01:42:41.551] Server  LOG     ✓ Compiled in 230ms
+[01:46:14.458] Server  ERROR   React expects the `children` prop of <title> tags to be a string, number, bigint, or object with a novel `toString` method but found an Array with length 2 instead. Browsers treat all child Nodes of <title> tags as Text content and React expects to be able to convert `children` of <title> tags to a single string value which is why Arrays of length greater than 1 are not supported. When using JSX it can be common to combine text nodes and value nodes. For example: <title>hello {nameOfUser}</title>. While not immediately apparent, `children` in this case is an Array with length 2. If your `children` prop is using this form try rewriting it using a template string: <title>{`hello ${nameOfUser}`}</title>.
+[01:53:04.135] Server  LOG     ✓ Compiled in 1477ms
+[01:53:04.724] Browser ERROR   ./components/Navbar.js:52:31
+Parsing ecmascript source code failed
+  50 |   );
+  51 | }
+> 52 | export default function Navbar
+     |                               ^
 
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
+Expected '(', got '<eof>'
 
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+Import trace:
+  SSR:
+    ./components/Navbar.js
+    ./pages/_app.js
+[01:53:12.186] Server  LOG     ✓ Compiled in 153ms
+[01:53:12.728] Browser ERROR   ./components/Navbar.js:52:1
+Ecmascript file had an error
+  50 |   );
+  51 | }
+> 52 | export default  Navbar
+     | ^^^^^^^^^^^^^^^^^^^^^^
 
-https://react.dev/link/hydration-mismatch
+the name `default` is exported multiple times
 
-  ...
-    <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={false}>
-      <App pageProps={{products:[...]}} __N_SSP={true} Component={function Home} err={undefined} ...>
-        <Provider store={{...}}>
-          <Navbar>
-            <nav className="Navbar-mod...">
-              <div className="Navbar-mod...">
-                <LinkComponent>
-                <div className="Navbar-mod...">
-                  <LinkComponent>
-                  <LinkComponent>
-                  <div className="Navbar-mod...">
-                    <LinkComponent>
-+                   <span className="Navbar-module__nuAbfa__badge">
-          ...
-      ...
+Import trace:
+  SSR:
+    ./components/Navbar.js
+    ./pages/_app.js
+[01:53:21.732] Server  LOG     ✓ Compiled in 87ms
+[01:53:22.725] Browser ERROR   ./components/Navbar.js:8:11
+Parsing ecmascript source code failed
+   6 | import styles from './Navbar.module.css';
+   7 |
+>  8 | efunction Navbar() {
+     |           ^^^^^^
+   9 |   const router = useRouter();
+  10 |   const cartCount = useSelector(selectCartItemCount);
+  11 |   const [mounted, setMounted] = useState(false);
 
-[00:09:43.518] Server  LOG     ✓ Compiled in 1887ms
-[00:12:30.317] Server  LOG     ✓ Compiled in 268ms
-[00:12:31.179] Server  LOG     ✓ Compiled in 633ms
+Expected ';', '}' or <eof>
+
+Import trace:
+  SSR:
+    ./components/Navbar.js
+    ./pages/_app.js
+[01:53:22.725] Browser ERROR   ./components/Navbar.js
+Code generation for chunk item errored
+An error occurred while generating the chunk item [project]/components/Navbar.js [ssr] (ecmascript)
+
+Caused by:
+- CJS module can't be async.
+
+Debug info:
+- An error occurred while generating the chunk item [project]/components/Navbar.js [ssr] (ecmascript)
+- Execution of <ModuleChunkItem as EcmascriptChunkItem>::content_with_async_module_info failed
+- Execution of EcmascriptChunkItemContent::new failed
+- CJS module can't be async.
+
+Import trace:
+  SSR:
+    ./components/Navbar.js
+    ./pages/_app.js
+[01:53:23.152] Server  LOG     ✓ Compiled in 65ms
+[02:26:50.388] Server  LOG     ✓ Compiled in 1106ms
+[02:26:50.670] Server  LOG     ✓ Compiled in 79ms
+[02:26:52.948] Server  LOG     ✓ Compiled in 76ms
+[02:26:59.987] Server  LOG     ✓ Compiled in 62ms
+[02:38:46.013] Server  LOG     ✓ Compiled in 640ms
+[02:49:50.243] Server  LOG     ✓ Compiled in 1261ms
+[02:49:56.023] Server  LOG     ✓ Compiled in 1336ms
+[02:49:56.447] Server  LOG     ✓ Compiled in 130ms
+[02:49:57.696] Server  LOG     ✓ Compiled in 331ms
+[02:49:58.661] Server  LOG     ✓ Compiled in 104ms
+[02:49:59.539] Server  LOG     ✓ Compiled in 72ms
+[02:50:00.397] Server  LOG     ✓ Compiled in 70ms
+[02:50:01.307] Server  LOG     ✓ Compiled in 89ms
+[02:50:12.749] Server  LOG     ✓ Compiled in 130ms
+[02:50:13.689] Server  LOG     ✓ Compiled in 72ms
+[02:50:13.939] Server  LOG     ✓ Compiled in 44ms
+[02:50:15.114] Server  LOG     ✓ Compiled in 36ms
+[02:50:15.899] Server  LOG     ✓ Compiled in 41ms
+[02:50:19.714] Server  LOG     ✓ Compiled in 449ms
+[02:50:26.684] Server  LOG     ✓ Compiled in 70ms
+[02:50:27.830] Server  LOG     ✓ Compiled in 44ms
+[02:50:35.866] Server  LOG     ✓ Compiled in 161ms
+[02:50:37.065] Browser ERROR   %o
+
+%s
+
+%s
+ {} The above error occurred in the <ProductCard> component. React will try to recreate this component tree from scratch using the error boundary you provided, PagesDevOverlayErrorBoundary.
+[02:50:37.637] Server  LOG     ✓ Compiled in 508ms
+[02:50:38.730] Browser ERROR   %o
+
+%s
+
+%s
+ {} The above error occurred in the <ProductCard> component. React will try to recreate this component tree from scratch using the error boundary you provided, PagesDevOverlayErrorBoundary.
+[02:50:39.473] Server  LOG     ✓ Compiled in 438ms
+[02:50:39.759] Browser ERROR   %o
+
+%s
+
+%s
+ {} The above error occurred in the <ProductCard> component. React will try to recreate this component tree from scratch using the error boundary you provided, PagesDevOverlayErrorBoundary.
+[02:50:39.928] Server  LOG     ✓ Compiled in 138ms
+[02:50:56.123] Server  LOG     ✓ Compiled in 43ms
+[02:54:31.376] Server  LOG     ✓ Compiled in 47ms
+[02:54:36.039] Server  LOG     ✓ Compiled in 33ms

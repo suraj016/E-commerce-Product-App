@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { addToCart } from '../../redux/cartSlice';
@@ -8,7 +9,7 @@ export default function ProductDetail({ product }) {
   const dispatch = useDispatch();
   const [btnText, setBtnText] = useState('Add to Cart');
 
-  function handleAddToCart() {
+  function addItem() {
     dispatch(
       addToCart({
         id: product.id,
@@ -17,14 +18,17 @@ export default function ProductDetail({ product }) {
         image: product.image,
       })
     );
-    setBtnText('Added to Cart!');
+    setBtnText('Added!');
     setTimeout(() => setBtnText('Add to Cart'), 1500);
   }
 
   return (
     <div className="container">
+      <Head>
+        <title>ShopZone | {product.title}</title>
+      </Head>
       <Link href="/" className={styles.backLink}>
-        ← Back to Home
+        ← Back to shopping
       </Link>
 
       <div className={styles.layout}>
@@ -39,12 +43,14 @@ export default function ProductDetail({ product }) {
         <div className={styles.details}>
           <p className={styles.category}>{product.category}</p>
           <h1 className={styles.title}>{product.title}</h1>
-          <p className={styles.rating}>
-            ⭐ {product.rating.rate} ({product.rating.count} reviews)
-          </p>
-          <p className={styles.price}>${product.price.toFixed(2)}</p>
+          {product.rating && product.rating.rate != null && (
+            <p className={styles.rating}>
+              ⭐ {product.rating.rate} ({product.rating.count ?? 0} reviews)
+            </p>
+          )}
+          <p className={styles.price}>${(product.price ?? 0).toFixed(2)}</p>
           <p className={styles.description}>{product.description}</p>
-          <button onClick={handleAddToCart} className={styles.addBtn}>
+          <button type="button" onClick={addItem} className={styles.addBtn}>
             {btnText}
           </button>
         </div>

@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {
-    console.log('fetching products...');
     const res = await fetch('https://fakestoreapi.com/products');
     const data = await res.json();
     return data;
@@ -48,10 +47,12 @@ const productsSlice = createSlice({
 export const { setSearchQuery, setProducts } = productsSlice.actions;
 
 export const selectFilteredProducts = (state) => {
-  const { items, searchQuery } = state.products;
-  if (!searchQuery.trim()) return items;
-  const q = searchQuery.toLowerCase();
-  return items.filter((item) => item.title.toLowerCase().includes(q));
+  const query = state.products.searchQuery;
+  const items = state.products.items || [];
+  if (!query || !query.trim()) return items;
+  return items.filter((item) =>
+    item.title && item.title.toLowerCase().includes(query.toLowerCase().trim())
+  );
 };
 
 export const selectAllProducts = (state) => state.products.items;

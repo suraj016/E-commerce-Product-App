@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   removeFromCart,
@@ -6,7 +7,6 @@ import {
   clearCart,
   selectCartItems,
   selectCartTotal,
-  selectCartItemCount,
 } from '../redux/cartSlice';
 import styles from './cart.module.css';
 
@@ -14,35 +14,36 @@ export default function Cart() {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
   const total = useSelector(selectCartTotal);
-  const itemCount = useSelector(selectCartItemCount);
 
-  function handleRemove(id) {
+  function removeItem(id) {
     dispatch(removeFromCart(id));
   }
 
-  function handleQuantityChange(id, newQuantity) {
-    if (newQuantity < 1) return;
-    dispatch(updateQuantity({ id, quantity: newQuantity }));
+  function changeQty(id, qty) {
+    if (qty < 1) return;
+    dispatch(updateQuantity({ id, quantity: qty }));
   }
 
-  function handleClearCart() {
-    const confirmed = window.confirm('Are you sure you want to clear the cart?');
-    if (confirmed) dispatch(clearCart());
+  function clearAll() {
+    if (window.confirm('Clear everything from your cart?')) dispatch(clearCart());
   }
 
-  function handleCheckout() {
-    alert('Feature coming soon!');
+  function onCheckout() {
+    alert('Checkout isn’t ready yet — coming soon.');
   }
 
   return (
     <div className="container">
+      <Head>
+        <title>ShopZone | Cart</title>
+      </Head>
       <h1 className={styles.pageTitle}>Your Cart</h1>
 
       {cartItems.length === 0 && (
         <div className={styles.emptyCart}>
-          <p>Your cart is empty</p>
+          <p>Nothing in your cart yet.</p>
           <Link href="/" className={styles.continueLink}>
-            ← Continue Shopping
+            ← Go Back 
           </Link>
         </div>
       )}
@@ -60,35 +61,34 @@ export default function Cart() {
                 <div className={styles.itemInfo}>
                   <p className={styles.itemTitle}>{item.title}</p>
                   <p className={styles.itemPrice}>
-                    ${item.price.toFixed(2)} each
+                    ${(item.price ?? 0).toFixed(2)} each
                   </p>
                 </div>
                 <div className={styles.qtyControls}>
                   <button
+                    type="button"
                     className={styles.qtyBtn}
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity - 1)
-                    }
+                    onClick={() => changeQty(item.id, item.quantity - 1)}
                     disabled={item.quantity <= 1}
                   >
                     −
                   </button>
                   <span className={styles.qtyNumber}>{item.quantity}</span>
                   <button
+                    type="button"
                     className={styles.qtyBtn}
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity + 1)
-                    }
+                    onClick={() => changeQty(item.id, item.quantity + 1)}
                   >
                     +
                   </button>
                 </div>
                 <p className={styles.itemSubtotal}>
-                  ${(item.price * item.quantity).toFixed(2)}
+                  ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
                 </p>
                 <button
+                  type="button"
                   className={styles.removeBtn}
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => removeItem(item.id)}
                 >
                   ×
                 </button>
@@ -97,16 +97,18 @@ export default function Cart() {
           </div>
 
           <div className={styles.summary}>
-            <p className={styles.totalText}>Total: ${total.toFixed(2)}</p>
+            <p className={styles.totalText}>Total: ${(total ?? 0).toFixed(2)}</p>
             <div className={styles.summaryButtons}>
               <button
-                onClick={handleClearCart}
+                type="button"
+                onClick={clearAll}
                 className={styles.clearBtn}
               >
                 Clear Cart
               </button>
               <button
-                onClick={handleCheckout}
+                type="button"
+                onClick={onCheckout}
                 className={styles.checkoutBtn}
               >
                 Proceed to Checkout

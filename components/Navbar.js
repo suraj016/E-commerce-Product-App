@@ -1,12 +1,18 @@
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { selectCartItemCount } from '../redux/cartSlice';
 import styles from './Navbar.module.css';
 
-export default function Navbar() {
+function Navbar() {
   const router = useRouter();
   const cartCount = useSelector(selectCartItemCount);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <nav className={styles.nav}>
@@ -34,7 +40,7 @@ export default function Navbar() {
             >
               Cart
             </Link>
-            {cartCount > 0 && (
+            {mounted && cartCount > 0 && (
               <span className={styles.badge}>{cartCount}</span>
             )}
           </div>
@@ -43,3 +49,4 @@ export default function Navbar() {
     </nav>
   );
 }
+export default Navbar
