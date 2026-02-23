@@ -100,3 +100,62 @@ Cart → /cart inside <div className={styles.cartWrapper}>, with <span className
 components/Navbar.module.css
 Matches your spec: .nav, .navInner, .logo, .navLinks, .navLinks a, .navLinks a:hover, .active, .cartWrapper, .badge, and the @media (max-width: 600px) block
 No new linter issues. Run the app and the navbar will show on every page with active link styling and a cart badge when the cart has items.
+
+
+/// Pahse 3 
+
+components/ProductCard.js
+Imports: useDispatch, useRouter, useState, addToCart, ProductCard.module.css
+Props: id, title, price, image, category
+State: btnText (default 'Add to Cart')
+handleAddToCart: dispatch(addToCart({ id, title, price, image })), set 'Added!', reset after 1500ms
+handleViewDetails: router.push('/product/' + id)
+JSX: card → imageContainer (img) → info (category, title, price) → buttons (View Details, Add to Cart)
+components/ProductCard.module.css
+Styles for .card, .imageContainer, .image, .info, .category, .title, .price, .buttons, .viewBtn, .addBtn (including hover) as specified
+pages/index.js
+Imports: useEffect, useDispatch, useSelector, ProductCard, setProducts, setSearchQuery, selectFilteredProducts, index.module.css
+getServerSideProps: Fetches https://fakestoreapi.com/products, returns { props: { products } }
+Home: Uses dispatch, filteredProducts (selector), status; useEffect runs dispatch(setProducts(products)) with [products]
+handleSearch: dispatch(setSearchQuery(event.target.value))
+JSX: container → pageHeader (title “Products”, search input) → loading/failed/no-results messages → grid of ProductCard with key, id, title, price, image, category
+pages/index.module.css
+.pageHeader, .pageTitle, .searchBar, .searchBar:focus, .grid, .message, and the 480px media query for the grid
+Flow
+getServerSideProps loads products and passes them to Home.
+useEffect pushes those products into Redux with setProducts(products) so status becomes 'succeeded' and the grid shows.
+Search updates searchQuery via setSearchQuery; selectFilteredProducts filters by title and the grid updates.
+ProductCard “View Details” goes to /product/[id]; “Add to Cart” dispatches addToCart and shows “Added!” briefly.
+No TypeScript; plain JS only. Lint is clean. useState was not added to index.js because the spec didn’t use it there.
+
+// overall summary 
+
+1. Project setup
+Next.js app in ecommerce-app-new: JavaScript, ESLint, no TypeScript/Tailwind, Pages Router, no src/, no import alias.
+Config: package.json, next.config.mjs (reactStrictMode, images.domains: ['fakestoreapi.com']), eslint.config.mjs, .gitignore (node_modules, .next, .env).
+Base styles: styles/globals.css (reset, .container), imported in _app.js.
+Redux packages: @reduxjs/toolkit, react-redux installed.
+Placeholder structure: Components (Navbar, ProductCard, DashboardCard) and pages (cart, dashboard, product/[id]) created as requested; duplicate ecommerce-app folder removed; missing package.json/config recreated when needed.
+2. Redux
+redux/store.js – configureStore with products and cart; loadCartFromStorage() for SSR-safe cart hydration; subscribe to persist cart to localStorage.
+redux/productsSlice.js – State: items, status, error, searchQuery. Thunk: fetchProducts (fakestoreapi.com). Reducers: setSearchQuery, setProducts. Selectors: selectFilteredProducts, selectAllProducts, selectProductsStatus, selectProductsError.
+redux/cartSlice.js – State: cartItems. Reducers: addToCart, removeFromCart, updateQuantity, clearCart. Selectors: selectCartItems, selectCartItemCount, selectCartTotal.
+3. App shell & Navbar
+pages/app.js – Imports Provider, store, globals.css, Navbar. Renders <Provider store={store}><Navbar /><Component {...pageProps} /></Provider>.
+components/Navbar.js – Links: Home, Dashboard, Cart; active state from useRouter().pathname; cart badge from useSelector(selectCartItemCount).
+components/Navbar.module.css – Sticky nav, logo “ShopZone”, links, cart badge, responsive styles.
+4. Home page & ProductCard
+pages/index.js – getServerSideProps fetches from https://fakestoreapi.com/products and passes products. On mount, useEffect dispatches setProducts(products). Search input dispatches setSearchQuery; list comes from selectFilteredProducts. Shows loading/failed/no-results messages and a grid of ProductCard.
+pages/index.module.css – Header, title “Products”, search bar, responsive grid, message styles.
+components/ProductCard.js – Props: id, title, price, image, category. “View Details” → router.push('/product/' + id). “Add to Cart” → dispatch(addToCart(...)), button shows “Added!” then resets.
+components/ProductCard.module.css – Card layout, image container, info, price, view/add buttons and hover.
+5. Git & GitHub
+.gitignore added; node_modules removed from tracking; history rewritten with git filter-branch so the large file was removed; force-pushed to https://github.com/suraj016/E-commerce-Product-App.git on main.
+Current project layout (relevant parts)
+ecommerce-app-new/├── components/│   ├── Navbar.js + Navbar.module.css│   ├── ProductCard.js + ProductCard.module.css│   └── DashboardCard.js + DashboardCard.module.css (placeholder)├── pages/│   ├── _app.js│   ├── index.js + index.module.css│   ├── cart.js (placeholder: "Cart Page")│   ├── dashboard.js (placeholder: "Dashboard")│   └── product/[id].js (placeholder: "Product Detail")├── redux/│   ├── store.js│   ├── productsSlice.js│   └── cartSlice.js├── styles/│   └── globals.css├── next.config.mjs├── package.json└── .gitignore
+Not built yet (by design)
+Cart page – Real UI and cart logic (list, quantity, remove, total).
+Product detail page – Data from ID, add to cart, back link.
+Dashboard – Stats/cards (e.g. with DashboardCard).
+Pagination – Comment in index.js: “TODO: add pagination later”.
+In short: project is set up, Redux is wired, Navbar and Home (with SSR products, search, and ProductCard with add-to-cart and view-details) are done; cart, product detail, and dashboard pages are still placeholders.

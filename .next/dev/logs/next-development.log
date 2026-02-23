@@ -1,1 +1,31 @@
-[00:00:05.650] Server  LOG     ✓ Ready in 3.1s
+[00:00:04.712] Server  LOG     ✓ Ready in 3.4s
+[00:00:07.790] Server  LOG     ○ Compiling / ...
+[00:04:42.465] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={false}>
+      <App pageProps={{products:[...]}} __N_SSP={true} Component={function Home} err={undefined} ...>
+        <Provider store={{...}}>
+          <Navbar>
+            <nav className="Navbar-mod...">
+              <div className="Navbar-mod...">
+                <LinkComponent>
+                <div className="Navbar-mod...">
+                  <LinkComponent>
+                  <LinkComponent>
+                  <div className="Navbar-mod...">
+                    <LinkComponent>
++                   <span className="Navbar-module__nuAbfa__badge">
+          ...
+      ...
+
