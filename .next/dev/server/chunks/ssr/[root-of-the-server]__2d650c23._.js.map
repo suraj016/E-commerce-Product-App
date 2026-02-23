@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/hp/Desktop/PracticalTest-1/ecommerce-app-new/pages/index.js"],"sourcesContent":["export default function Home() {\n  return <div>Home Page</div>;\n}\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBAAO,qKAAC;kBAAI;;;;;;AACd"}}]
+}
