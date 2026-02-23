@@ -56,3 +56,47 @@ public/vercel.svg
 public/next.svg
 styles/Home.module.css and pages/api/ were not present, so nothing to delete there.
 No Redux or component logic was added; only structure and base styles. Run the app with npm run dev from ecommerce-app-new.
+
+// Phase 2 
+
+redux/productsSlice.js
+State: items, status ('idle' | 'loading' | 'succeeded' | 'failed'), error, searchQuery
+Thunk: fetchProducts – GETs https://fakestoreapi.com/products, console.log('fetching products...'), returns JSON
+extraReducers: pending → loading, fulfilled → succeeded + set items, rejected → failed + set error
+Reducers: setSearchQuery, setProducts
+Selectors: selectFilteredProducts (filters by searchQuery), selectAllProducts, selectProductsStatus, selectProductsError
+Exports: fetchProducts, setSearchQuery, setProducts, selectors, default productsReducer
+redux/cartSlice.js
+State: cartItems: [] (each item: { id, title, price, image, quantity })
+Reducers: addToCart (increment if exists, else push with quantity 1), removeFromCart (filter by id), updateQuantity (by id, min 1), clearCart
+Selectors: selectCartItems, selectCartItemCount (reduce over quantity), selectCartTotal (price×quantity, .toFixed(2) then parseFloat)
+Exports: action creators, selectors, default cartReducer
+redux/store.js
+Imports: productsReducer, cartReducer
+loadCartFromStorage(): try/catch, localStorage.getItem('cart'), parse; returns { cartItems: parsedData } or undefined; guards typeof window === 'undefined' for SSR
+configureStore: products and cart reducers; preloadedState only set when loadCartFromStorage() returns data (avoids cart: undefined)
+subscribe: on change, write store.getState().cart.cartItems to localStorage.setItem('cart', ...) in try/catch
+Export: default store
+Redux is ready. To use it in the app, wrap it with Provider in pages/_app.js (e.g. import store and Provider from react-redux, then <Provider store={store}>). I can add that wiring in _app.js if you want.
+
+
+
+// Phase 2 
+
+
+
+pages/app.js
+- Imports: Provider (react-redux), store (redux/store), globals.css, Navbar
+Wraps the app in <Provider store={store}>, renders <Navbar /> above <Component {...pageProps} />
+components/Navbar.js
+Imports: Link, useRouter, useSelector, selectCartItemCount, Navbar.module.css
+Uses router.pathname and cartCount from Redux
+Layout: <nav> → <div className={styles.navInner}>
+Left: <Link href="/" className={styles.logo}>ShopZone</Link>
+Right: <div className={styles.navLinks}> with three links:
+Home → / with active when pathname === '/'
+Dashboard → /dashboard with active when pathname === '/dashboard'
+Cart → /cart inside <div className={styles.cartWrapper}>, with <span className={styles.badge}>{cartCount}</span> only when cartCount > 0, and active when pathname === '/cart'
+components/Navbar.module.css
+Matches your spec: .nav, .navInner, .logo, .navLinks, .navLinks a, .navLinks a:hover, .active, .cartWrapper, .badge, and the @media (max-width: 600px) block
+No new linter issues. Run the app and the navbar will show on every page with active link styling and a cart badge when the cart has items.
